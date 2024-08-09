@@ -35,10 +35,18 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 #define BUILDSTRING "Win32 DEBUG"
 #endif
 
+#ifdef QUAKE2_PLATFORM_SUFFIX
+#define CPUSTRING QUAKE2_PLATFORM_SUFFIX
+#else
+
 #ifdef _M_IX86
 #define	CPUSTRING	"x86"
+#elif defined _M_X64
+#define CPUSTRING   "x64"
 #elif defined _M_ALPHA
 #define	CPUSTRING	"AXP"
+#endif
+
 #endif
 
 #elif defined __linux__
