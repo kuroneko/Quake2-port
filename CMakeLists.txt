@@ -130,3 +130,4 @@ add_subdirectory(game)
 add_subdirectory(ctf)
 
 add_subdirectory(ref_gl)
+add_subdirectory(ref_soft)
