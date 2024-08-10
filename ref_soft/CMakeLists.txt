@@ -20,11 +20,11 @@ add_library(ref_soft MODULE
 target_compile_definitions(ref_soft PUBLIC ${QUAKE2_BUILD_DEFS})
 if(CMAKE_SYSTEM_NAME MATCHES "Windows")
     target_sources(ref_soft PRIVATE
-            ../win32/q_shwin.c
-            ../win32/rw_imp.c
-            ../win32/rw_ddraw.c
-            ../win32/rw_dib.c
-            ref_soft.def)
+        ../win32/q_shwin.c
+        ../win32/rw_imp.c
+        ../win32/rw_ddraw.c
+        ../win32/rw_dib.c
+        ref_soft.def)
     target_link_libraries(ref_soft PUBLIC winmm)
 endif()
 install(TARGETS ref_soft LIBRARY DESTINATION .)
