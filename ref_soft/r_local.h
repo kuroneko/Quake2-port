@@ -137,7 +137,11 @@ extern oldrefdef_t      r_refdef;
 
 #include "r_model.h"
 
+#ifndef QUAKE2_CACHELINE_SIZE
 #define CACHE_SIZE      32
+#else
+#define CACHE_SIZE      (QUAKE2_CACHELINE_SIZE)
+#endif
 
 /*
 ====================================================
