@@ -141,7 +141,7 @@ void Sys_Mkdir (char *path)
 
 char	findbase[MAX_OSPATH];
 char	findpath[MAX_OSPATH];
-int		findhandle;
+intptr_t findhandle;
 
 static qboolean CompareAttributes( unsigned found, unsigned musthave, unsigned canthave )
 {
@@ -172,14 +172,14 @@ static qboolean CompareAttributes( unsigned found, unsigned musthave, unsigned c
 
 char *Sys_FindFirst (char *path, unsigned musthave, unsigned canthave )
 {
-	struct _finddata_t findinfo;
+	struct _finddata32_t findinfo;
 
 	if (findhandle)
 		Sys_Error ("Sys_BeginFind without close");
 	findhandle = 0;
 
 	COM_FilePath (path, findbase);
-	findhandle = _findfirst (path, &findinfo);
+	findhandle = _findfirst32(path, &findinfo);
 	if (findhandle == -1)
 		return NULL;
 	if ( !CompareAttributes( findinfo.attrib, musthave, canthave ) )
@@ -190,11 +190,11 @@ char *Sys_FindFirst (char *path, unsigned musthave, unsigned canthave )
 
 char *Sys_FindNext ( unsigned musthave, unsigned canthave )
 {
-	struct _finddata_t findinfo;
+	struct _finddata32_t findinfo;
 
 	if (findhandle == -1)
 		return NULL;
-	if (_findnext (findhandle, &findinfo) == -1)
+	if (_findnext32(findhandle, &findinfo) == -1)
 		return NULL;
 	if ( !CompareAttributes( findinfo.attrib, musthave, canthave ) )
 		return NULL;

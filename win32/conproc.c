@@ -84,9 +84,9 @@ int CCheckParm (char *parm)
 void InitConProc (int argc, char **argv)
 {
 	unsigned	threadAddr;
-	HANDLE		hFile;
-	HANDLE		heventParent;
-	HANDLE		heventChild;
+	HANDLE		hFile = 0;
+	HANDLE		heventParent = 0;
+	HANDLE		heventChild = 0;
 	int			t;
 
 	ccom_argc = argc;
@@ -96,19 +96,19 @@ void InitConProc (int argc, char **argv)
 	if ((t = CCheckParm ("-HFILE")) > 0)
 	{
 		if (t < argc)
-			hFile = (HANDLE)atoi (ccom_argv[t+1]);
+			hFile = (HANDLE)atoll(ccom_argv[t+1]);
 	}
 		
 	if ((t = CCheckParm ("-HPARENT")) > 0)
 	{
 		if (t < argc)
-			heventParent = (HANDLE)atoi (ccom_argv[t+1]);
+			heventParent = (HANDLE)atoll(ccom_argv[t+1]);
 	}
 		
 	if ((t = CCheckParm ("-HCHILD")) > 0)
 	{
 		if (t < argc)
-			heventChild = (HANDLE)atoi (ccom_argv[t+1]);
+			heventChild = (HANDLE)atoll(ccom_argv[t+1]);
 	}
 
 
