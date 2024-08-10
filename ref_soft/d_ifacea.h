@@ -19,7 +19,12 @@
 #define	MAXHEIGHT	1200
 
 // !!! if this is changed, it must be changed in qcommon.h too !!!
-#define CACHE_SIZE	32		// used to align key data structures
+// used to align key data structures
+#ifndef QUAKE2_CACHELINE_SIZE
+#define CACHE_SIZE      32
+#else
+#define CACHE_SIZE      (QUAKE2_CACHELINE_SIZE)
+#endif
 
 // particle_t structure
 // !!! if this is changed, it must be changed in d_iface.h too !!!

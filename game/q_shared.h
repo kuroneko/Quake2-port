@@ -32,12 +32,13 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 #endif
 
 #include <assert.h>
+#include <stddef.h>
+#include <stdint.h>
 #include <math.h>
 #include <stdio.h>
 #include <stdarg.h>
 #include <string.h>
 #include <stdlib.h>
-#include <stdint.h>
 #include <time.h>
 
 #if (defined _M_IX86 || defined __i386__) && !defined C_ONLY && !defined __sun__
@@ -232,12 +233,128 @@ int Q_strncasecmp (char *s1, char *s2, int n);
 
 //=============================================
 
-short	BigShort(short l);
-short	LittleShort(short l);
-int		BigLong (int l);
-int		LittleLong (int l);
-float	BigFloat (float l);
-float	LittleFloat (float l);
+/*
+ * CC:  I've ripped out the byte order functions as they were so they can be
+ *      resolved at compile time for better optimisation.
+ */
+
+static inline short
+ShortSwap (short l)
+{
+    byte    b1,b2;
+
+    b1 = l&255;
+    b2 = (l>>8)&255;
+
+    return (b1<<8) + b2;
+}
+
+static inline int
+LongSwap (int l)
+{
+    byte    b1,b2,b3,b4;
+
+    b1 = l&255;
+    b2 = (l>>8)&255;
+    b3 = (l>>16)&255;
+    b4 = (l>>24)&255;
+
+    return ((int)b1<<24) + ((int)b2<<16) + ((int)b3<<8) + b4;
+}
+
+static inline float
+FloatSwap (float f)
+{
+    static_assert(sizeof(float) == 4, "sizeof(float) != 4, FloatSwap will not work without modification");
+
+    union
+    {
+      float	f;
+      byte	b[4];
+    } dat1, dat2;
+
+
+    dat1.f = f;
+    dat2.b[0] = dat1.b[3];
+    dat2.b[1] = dat1.b[2];
+    dat2.b[2] = dat1.b[1];
+    dat2.b[3] = dat1.b[0];
+    return dat2.f;
+}
+
+#if defined(QUAKE2_HOST_LITTLE_ENDIAN)
+static inline short
+BigShort(short l)
+{
+    return ShortSwap(l);
+}
+
+static inline short
+LittleShort(short l)
+{
+    return l;
+}
+
+static inline int
+BigLong (int l)
+{
+    return LongSwap(l);
+}
+
+static inline int
+LittleLong (int l)
+{
+    return l;
+}
+
+static inline float
+BigFloat (float l)
+{
+    return FloatSwap(l);
+}
+
+static inline float
+LittleFloat (float l) {
+    return l;
+}
+#elif defined(QUAKE2_HOST_BIG_ENDIAN)
+static inline short
+BigShort(short l)
+{
+    return l;
+}
+
+static inline short
+LittleShort(short l)
+{
+    return ShortSwap(l);
+}
+
+static inline int
+BigLong (int l)
+{
+    return l;
+}
+
+static inline int
+LittleLong (int l)
+{
+    return LongSwap(l);
+}
+
+static inline float
+BigFloat (float l)
+{
+    return l;
+}
+
+static inline float
+LittleFloat (float l) {
+    return FloatSwap(l);
+}
+#else
+#error One of QUAKE2_HOST_LITTLE_ENDIAN or QUAKE2_HOST_BIG_ENDIAN must be defined
+#endif
 
 void	Swap_Init (void);
 char	*va(char *format, ...);
