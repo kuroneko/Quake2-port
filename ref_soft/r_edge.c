@@ -132,11 +132,8 @@ void R_BeginEdgeFrame (void)
 		r_currentkey = 0;
 	}
 
-// FIXME: set with memset
-	for (v=r_refdef.vrect.y ; v<r_refdef.vrectbottom ; v++)
-	{
-		newedges[v] = removeedges[v] = NULL;
-	}
+    memset(newedges+r_refdef.vrect.y, 0, sizeof(newedges[0]) * (r_refdef.vrectbottom-r_refdef.vrect.y));
+    memset(removeedges+r_refdef.vrect.y, 0, sizeof(removeedges[0]) * (r_refdef.vrectbottom-r_refdef.vrect.y));
 }
 
 
