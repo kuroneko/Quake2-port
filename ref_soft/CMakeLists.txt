@@ -17,7 +17,7 @@ add_library(ref_soft MODULE
         r_sprite.c
         r_surf.c
         ../game/q_shared.c)
-target_compile_definitions(ref_soft PUBLIC ${QUAKE2_BUILD_DEFS})
+target_compile_definitions(ref_soft PUBLIC ${QUAKE2_BUILD_DEFS} C_ONLY=1)
 if(CMAKE_SYSTEM_NAME MATCHES "Windows")
     target_sources(ref_soft PRIVATE
         ../win32/q_shwin.c
