@@ -142,6 +142,16 @@ extern oldrefdef_t      r_refdef;
 #else
 #define CACHE_SIZE      (QUAKE2_CACHELINE_SIZE)
 #endif
+#define CACHE_ALIGNED_SIZE(x)   ((x)+QUAKE2_CACHELINE_SIZE)
+#define CACHE_ALIGNED_SIZE_OBJ(t,x) ((x) + ((QUAKE2_CACHELINE_SIZE+(sizeof(t)-1))/sizeof(t)))
+static inline void*
+q_cache_align(void *base_ptr)
+{
+    uintptr_t aligned_offs = ((uintptr_t)base_ptr + (CACHE_SIZE-1)) & ~(CACHE_SIZE-1);
+    return (void*)aligned_offs;
+}
+#define CACHE_ALIGNED_PTR(t,x)    ((t *)q_cache_align(x))
+
 
 /*
 ====================================================

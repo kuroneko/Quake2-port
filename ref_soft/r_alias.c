@@ -252,8 +252,7 @@ void R_AliasPreparePoints (void)
 	dstvert_t	*pstverts;
 	dtriangle_t	*ptri;
 	finalvert_t	*pfv[3];
-	finalvert_t	finalverts[MAXALIASVERTS +
-						((CACHE_SIZE - 1) / sizeof(finalvert_t)) + 3];
+	finalvert_t	finalverts[CACHE_ALIGNED_SIZE_OBJ(finalvert_t, MAXALIASVERTS)];
 	finalvert_t	*pfinalverts;
 
 //PGM
@@ -264,8 +263,7 @@ void R_AliasPreparePoints (void)
 //PGM
 
 	// put work vertexes on stack, cache aligned
-	pfinalverts = (finalvert_t *)
-			(((uintptr_t)&finalverts[0] + CACHE_SIZE - 1) & ~(CACHE_SIZE - 1));
+	pfinalverts = CACHE_ALIGNED_PTR(finalvert_t, finalverts);
 
 	aliasbatchedtransformdata.num_points = s_pmdl->num_xyz;
 	aliasbatchedtransformdata.last_verts = r_lastframe->verts;
