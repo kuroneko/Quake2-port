@@ -197,7 +197,7 @@ mleaf_t *Mod_PointInLeaf (vec3_t p, model_t *model)
 	node = model->nodes;
 	while (1)
 	{
-		if (node->contents != -1)
+		if (node->c.contents != -1)
 			return (mleaf_t *)node;
 		plane = node->plane;
 		d = DotProduct (p,plane->normal) - plane->dist;
@@ -326,11 +326,11 @@ void	R_NumberLeafs (mnode_t *node)
 	mleaf_t	*leaf;
 	int		leafnum;
 
-	if (node->contents != -1)
+	if (node->c.contents != -1)
 	{
 		leaf = (mleaf_t *)node;
 		leafnum = leaf - loadmodel->leafs;
-		if (leaf->contents & CONTENTS_SOLID)
+		if (leaf->c.contents & CONTENTS_SOLID)
 			return;
 		r_leaftovis[leafnum] = r_numvisleafs;
 		r_vistoleaf[r_numvisleafs] = leafnum;
@@ -681,8 +681,8 @@ Mod_SetParent
 */
 void Mod_SetParent (mnode_t *node, mnode_t *parent)
 {
-	node->parent = parent;
-	if (node->contents != -1)
+	node->c.parent = parent;
+	if (node->c.contents != -1)
 		return;
 	Mod_SetParent (node->children[0], node);
 	Mod_SetParent (node->children[1], node);
@@ -712,8 +712,8 @@ void Mod_LoadNodes (lump_t *l)
 	{
 		for (j=0 ; j<3 ; j++)
 		{
-			out->minmaxs[j] = LittleShort (in->mins[j]);
-			out->minmaxs[3+j] = LittleShort (in->maxs[j]);
+			out->c.minmaxs[j] = LittleShort (in->mins[j]);
+			out->c.minmaxs[3+j] = LittleShort (in->maxs[j]);
 		}
 	
 		p = LittleLong(in->planenum);
@@ -721,7 +721,7 @@ void Mod_LoadNodes (lump_t *l)
 
 		out->firstsurface = LittleShort (in->firstface);
 		out->numsurfaces = LittleShort (in->numfaces);
-		out->contents = CONTENTS_NODE;	// differentiate from leafs
+		out->c.contents = CONTENTS_NODE;	// differentiate from leafs
 		
 		for (j=0 ; j<2 ; j++)
 		{
@@ -760,11 +760,11 @@ void Mod_LoadLeafs (lump_t *l)
 	{
 		for (j=0 ; j<3 ; j++)
 		{
-			out->minmaxs[j] = LittleShort (in->mins[j]);
-			out->minmaxs[3+j] = LittleShort (in->maxs[j]);
+			out->c.minmaxs[j] = LittleShort (in->mins[j]);
+			out->c.minmaxs[3+j] = LittleShort (in->maxs[j]);
 		}
 
-		out->contents = LittleLong(in->contents);
+		out->c.contents = LittleLong(in->contents);
 		out->cluster = LittleShort(in->cluster);
 		out->area = LittleShort(in->area);
 

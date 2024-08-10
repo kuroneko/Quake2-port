@@ -451,9 +451,9 @@ void R_MarkLeaves (void)
 	{
 		// mark everything
 		for (i=0 ; i<r_worldmodel->numleafs ; i++)
-			r_worldmodel->leafs[i].visframe = r_visframecount;
+			r_worldmodel->leafs[i].c.visframe = r_visframecount;
 		for (i=0 ; i<r_worldmodel->numnodes ; i++)
-			r_worldmodel->nodes[i].visframe = r_visframecount;
+			r_worldmodel->nodes[i].c.visframe = r_visframecount;
 		return;
 	}
 
@@ -469,10 +469,10 @@ void R_MarkLeaves (void)
 			node = (mnode_t *)leaf;
 			do
 			{
-				if (node->visframe == r_visframecount)
+				if (node->c.visframe == r_visframecount)
 					break;
-				node->visframe = r_visframecount;
-				node = node->parent;
+				node->c.visframe = r_visframecount;
+				node = node->c.parent;
 			} while (node);
 		}
 	}
@@ -673,12 +673,12 @@ mnode_t *R_FindTopnode (vec3_t mins, vec3_t maxs)
 
 	while (1)
 	{
-		if (node->visframe != r_visframecount)
+		if (node->c.visframe != r_visframecount)
 			return NULL;		// not visible at all
 		
-		if (node->contents != CONTENTS_NODE)
+		if (node->c.contents != CONTENTS_NODE)
 		{
-			if (node->contents != CONTENTS_SOLID)
+			if (node->c.contents != CONTENTS_SOLID)
 				return	node; // we've reached a non-solid leaf, so it's
 							//  visible and not BSP clipped
 			return NULL;	// in solid, so not visible
@@ -817,7 +817,7 @@ void R_DrawBEntitiesOnList (void)
 	// calculate dynamic lighting for bmodel
 		R_PushDlights (currentmodel);
 
-		if (topnode->contents == CONTENTS_NODE)
+		if (topnode->c.contents == CONTENTS_NODE)
 		{
 		// not a leaf; has to be clipped to the world BSP
 			r_clipflags = clipflags;

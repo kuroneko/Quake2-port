@@ -298,11 +298,11 @@ void R_RecursiveClipBPoly (bedge_t *pedges, mnode_t *pnode, msurface_t *psurf)
 			pn = pnode->children[i];
 
 		// we're done with this branch if the node or leaf isn't in the PVS
-			if (pn->visframe == r_visframecount)
+			if (pn->c.visframe == r_visframecount)
 			{
-				if (pn->contents != CONTENTS_NODE)
+				if (pn->c.contents != CONTENTS_NODE)
 				{
-					if (pn->contents != CONTENTS_SOLID)
+					if (pn->c.contents != CONTENTS_SOLID)
 					{
 						if (r_newrefdef.areabits)
 						{
@@ -461,10 +461,10 @@ void R_RecursiveWorldNode (mnode_t *node, int clipflags)
 	float		d, dot;
 	mleaf_t		*pleaf;
 
-	if (node->contents == CONTENTS_SOLID)
+	if (node->c.contents == CONTENTS_SOLID)
 		return;		// solid
 
-	if (node->visframe != r_visframecount)
+	if (node->c.visframe != r_visframecount)
 		return;
 
 // cull the clipping planes if not trivial accept
@@ -483,17 +483,17 @@ void R_RecursiveWorldNode (mnode_t *node, int clipflags)
 
 			pindex = pfrustum_indexes[i];
 
-			rejectpt[0] = (float)node->minmaxs[pindex[0]];
-			rejectpt[1] = (float)node->minmaxs[pindex[1]];
-			rejectpt[2] = (float)node->minmaxs[pindex[2]];
+			rejectpt[0] = (float)node->c.minmaxs[pindex[0]];
+			rejectpt[1] = (float)node->c.minmaxs[pindex[1]];
+			rejectpt[2] = (float)node->c.minmaxs[pindex[2]];
 			
 			d = DotProduct (rejectpt, view_clipplanes[i].normal);
 			d -= view_clipplanes[i].dist;
 			if (d <= 0)
 				return;
-			acceptpt[0] = (float)node->minmaxs[pindex[3+0]];
-			acceptpt[1] = (float)node->minmaxs[pindex[3+1]];
-			acceptpt[2] = (float)node->minmaxs[pindex[3+2]];
+			acceptpt[0] = (float)node->c.minmaxs[pindex[3+0]];
+			acceptpt[1] = (float)node->c.minmaxs[pindex[3+1]];
+			acceptpt[2] = (float)node->c.minmaxs[pindex[3+2]];
 
 			d = DotProduct (acceptpt, view_clipplanes[i].normal);
 			d -= view_clipplanes[i].dist;
@@ -506,7 +506,7 @@ void R_RecursiveWorldNode (mnode_t *node, int clipflags)
 c_drawnode++;
 
 // if a leaf node, draw stuff
-	if (node->contents != -1)
+	if (node->c.contents != -1)
 	{
 		pleaf = (mleaf_t *)node;
 

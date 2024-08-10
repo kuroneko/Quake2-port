@@ -118,18 +118,19 @@ typedef struct msurface_s
 	struct msurface_s *nextalphasurface;
 } msurface_t;
 
-
 #define	CONTENTS_NODE	-1
+struct mnodeleaf_common_s {
+  int			contents;		// CONTENTS_NODE, to differentiate from leafs
+  int			visframe;		// node needs to be traversed if current
+
+  short		minmaxs[6];		// for bounding box culling
+
+  struct mnode_s	*parent;
+};
+
 typedef struct mnode_s
 {
-// common with leaf
-	int			contents;		// CONTENTS_NODE, to differentiate from leafs
-	int			visframe;		// node needs to be traversed if current
-	
-	short		minmaxs[6];		// for bounding box culling
-
-	struct mnode_s	*parent;
-
+    struct mnodeleaf_common_s   c;
 // node specific
 	mplane_t	*plane;
 	struct mnode_s	*children[2];	
@@ -142,14 +143,7 @@ typedef struct mnode_s
 
 typedef struct mleaf_s
 {
-// common with node
-	int			contents;		// wil be something other than CONTENTS_NODE
-	int			visframe;		// node needs to be traversed if current
-
-	short		minmaxs[6];		// for bounding box culling
-
-	struct mnode_s	*parent;
-
+  struct mnodeleaf_common_s   c;
 // leaf specific
 	int			cluster;
 	int			area;
