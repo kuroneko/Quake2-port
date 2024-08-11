@@ -994,7 +994,7 @@ void R_ClipAndDrawPoly ( float alpha, int isturbulent, qboolean textured )
 		scale = yscale * pout->zi;
 		pout->v = (ycenter - scale * transformed[1]);
 
-		pv += sizeof (vec5_t) / sizeof (pv);
+		pv += sizeof (vec5_t) / sizeof (*pv);
 	}
 
 // draw it
