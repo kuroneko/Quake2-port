@@ -79,12 +79,6 @@ static int	miplevel;
 float		scale_for_mip;
 int			ubasestep, errorterm, erroradjustup, erroradjustdown;
 
-// FIXME: should go away
-extern void			R_RotateBmodel (void);
-extern void			R_TransformFrustum (void);
-
-
-
 void R_GenerateSpans (void);
 void R_GenerateSpansBackward (void);
 
@@ -132,8 +126,8 @@ void R_BeginEdgeFrame (void)
 		r_currentkey = 0;
 	}
 
-    memset(newedges+r_refdef.vrect.y, 0, sizeof(newedges[0]) * (r_refdef.vrectbottom-r_refdef.vrect.y));
-    memset(removeedges+r_refdef.vrect.y, 0, sizeof(removeedges[0]) * (r_refdef.vrectbottom-r_refdef.vrect.y));
+    memset(newedges+r_refdef.vrect.y, 0, sizeof(edge_t*) * (r_refdef.vrectbottom-r_refdef.vrect.y));
+    memset(removeedges+r_refdef.vrect.y, 0, sizeof(edge_t*) * (r_refdef.vrectbottom-r_refdef.vrect.y));
 }
 
 
