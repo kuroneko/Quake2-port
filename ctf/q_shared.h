@@ -41,6 +41,7 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 #include <stdlib.h>
 #include <time.h>
 
+#if 0
 #if (defined _M_IX86 || defined __i386__) && !defined C_ONLY && !defined __sun__
 #define id386	1
 #else
@@ -51,6 +52,7 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 #define idaxp	1
 #else
 #define idaxp	0
+#endif
 #endif
 
 typedef unsigned char 		byte;
@@ -417,7 +419,7 @@ void	Sys_FindClose (void);
 
 
 // this is only here so the functions in q_shared.c and q_shwin.c can link
-void Sys_Error (char *error, ...);
+NORETURN void Sys_Error (char *error, ...);
 void Com_Printf (char *msg, ...);
 
 
