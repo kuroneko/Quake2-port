@@ -515,21 +515,6 @@ void R_SetupFrame (void)
 }
 
 
-#if	!id386
-
-/*
-================
-R_SurfacePatch
-================
-*/
-void R_SurfacePatch (void)
-{
-	// we only patch code on Intel
-}
-
-#endif	// !id386
-
-
 /* 
 ============================================================================== 
  
