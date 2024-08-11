@@ -262,8 +262,7 @@ void Netchan_Transmit (netchan_t *chan, int length, byte *data)
 	
 // add the unreliable part if space is available
 	if (send.maxsize - send.cursize >= length)
-        if (length)
-		    SZ_Write (&send, data, length);
+        SZ_Write (&send, data, length);
 	else
 		Com_Printf ("Netchan_Transmit: dumped unreliable\n");
 
