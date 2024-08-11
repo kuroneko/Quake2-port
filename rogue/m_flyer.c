@@ -722,7 +722,7 @@ void flyer_die(edict_t *self, edict_t *inflictor, edict_t *attacker, int damage,
 }
 
 // PMM - kamikaze code .. blow up if blocked	
-int flyer_blocked (edict_t *self, float dist)
+qboolean flyer_blocked (edict_t *self, float dist)
 {
 	vec3_t origin;
 

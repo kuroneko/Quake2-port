@@ -1575,7 +1575,7 @@ void misc_viper_missile_use (edict_t *self, edict_t *other, edict_t *activator)
 	self->enemy = G_Find (NULL, FOFS(targetname), self->target);
 	
 	VectorCopy (self->enemy->s.origin, vec);
-	vec[2] + 16;
+	//CC: no-op code commented out - vec[2] + 16;
 	
 	VectorCopy (self->s.origin, start);
 	VectorSubtract (vec, start, dir);

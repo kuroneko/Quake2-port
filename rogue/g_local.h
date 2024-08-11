@@ -23,19 +23,6 @@
 
 //==================================================================
 
-#ifndef _WIN32
-#include <nan.h>
-#define min(a,b) ((a) < (b) ? (a) : (b))
-#define max(a,b) ((a) > (b) ? (a) : (b))
-#ifdef __sun__
-#define _isnan(a) (NaN((a)))
-#else
-#define _isnan(a) ((a)==NAN)
-#endif
-#endif
-
-//==================================================================
-
 // view pitching times
 #define DAMAGE_TIME		0.5
 #define	FALL_TIME		0.3
@@ -615,10 +602,10 @@ extern	int	meansOfDeath;
 
 extern	edict_t			*g_edicts;
 
-#define	FOFS(x) (int)&(((edict_t *)0)->x)
-#define	STOFS(x) (int)&(((spawn_temp_t *)0)->x)
-#define	LLOFS(x) (int)&(((level_locals_t *)0)->x)
-#define	CLOFS(x) (int)&(((gclient_t *)0)->x)
+#define FOFS(x)     (offsetof(edict_t,x))
+#define STOFS(x)    (offsetof(spawn_temp_t,x))
+#define LLOFS(x)    (offsetof(level_locals_t,x))
+#define CLOFS(x)    (offsetof(gclient_t,x))
 
 #define random()	((rand () & 0x7fff) / ((float)0x7fff))
 #define crandom()	(2.0 * (random() - 0.5))

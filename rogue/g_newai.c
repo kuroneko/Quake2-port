@@ -1994,6 +1994,7 @@ qboolean monster_jump_finished (edict_t *self)
 //		}
 		return true;
 	}
+    return false;
 }
 
 

@@ -15,6 +15,8 @@
 #endif
 
 #include <assert.h>
+#include <stddef.h>
+#include <stdint.h>
 #include <math.h>
 #include <stdio.h>
 #include <stdarg.h>
@@ -22,6 +24,7 @@
 #include <stdlib.h>
 #include <time.h>
 
+#if 0
 #if (defined _M_IX86 || defined __i386__) && !defined C_ONLY && !defined __sun__
 #define id386	1
 #else
@@ -33,6 +36,7 @@
 #else
 #define idaxp	0
 #endif
+#endif
 
 typedef unsigned char 		byte;
 typedef enum {false, true}	qboolean;
@@ -42,6 +46,15 @@ typedef enum {false, true}	qboolean;
 #define NULL ((void *)0)
 #endif
 
+#ifndef NORETURN
+#if defined(__GNUC__)
+#define NORETURN    __attribute__((noreturn))
+#elif defined(_MSC_VER)
+#define NORETURN    __declspec(noreturn)
+#else
+#define NORETURN
+#endif
+#endif
 
 // angle indexes
 #define	PITCH				0		// up / down
@@ -214,12 +227,128 @@ int Q_strncasecmp (char *s1, char *s2, int n);
 
 //=============================================
 
-short	BigShort(short l);
-short	LittleShort(short l);
-int		BigLong (int l);
-int		LittleLong (int l);
-float	BigFloat (float l);
-float	LittleFloat (float l);
+/*
+ * CC:  I've ripped out the byte order functions as they were so they can be
+ *      resolved at compile time for better optimisation.
+ */
+
+static inline short
+ShortSwap (short l)
+{
+    byte    b1,b2;
+
+    b1 = l&255;
+    b2 = (l>>8)&255;
+
+    return (b1<<8) + b2;
+}
+
+static inline int
+LongSwap (int l)
+{
+    byte    b1,b2,b3,b4;
+
+    b1 = l&255;
+    b2 = (l>>8)&255;
+    b3 = (l>>16)&255;
+    b4 = (l>>24)&255;
+
+    return ((int)b1<<24) + ((int)b2<<16) + ((int)b3<<8) + b4;
+}
+
+static inline float
+FloatSwap (float f)
+{
+    static_assert(sizeof(float) == 4, "sizeof(float) != 4, FloatSwap will not work without modification");
+
+    union
+    {
+      float	f;
+      byte	b[4];
+    } dat1, dat2;
+
+
+    dat1.f = f;
+    dat2.b[0] = dat1.b[3];
+    dat2.b[1] = dat1.b[2];
+    dat2.b[2] = dat1.b[1];
+    dat2.b[3] = dat1.b[0];
+    return dat2.f;
+}
+
+#if defined(QUAKE2_HOST_LITTLE_ENDIAN)
+static inline int16_t
+BigShort(int16_t l)
+{
+    return ShortSwap(l);
+}
+
+static inline int16_t
+LittleShort(int16_t l)
+{
+    return l;
+}
+
+static inline int32_t
+BigLong (int32_t l)
+{
+    return LongSwap(l);
+}
+
+static inline int32_t
+LittleLong (int32_t l)
+{
+    return l;
+}
+
+static inline float
+BigFloat (float l)
+{
+    return FloatSwap(l);
+}
+
+static inline float
+LittleFloat (float l) {
+    return l;
+}
+#elif defined(QUAKE2_HOST_BIG_ENDIAN)
+static inline short
+BigShort(short l)
+{
+    return l;
+}
+
+static inline short
+LittleShort(short l)
+{
+    return ShortSwap(l);
+}
+
+static inline int32_t
+BigLong (int32_t l)
+{
+    return l;
+}
+
+static inline int32_t
+LittleLong (int32_t l)
+{
+    return LongSwap(l);
+}
+
+static inline float
+BigFloat (float l)
+{
+    return l;
+}
+
+static inline float
+LittleFloat (float l) {
+    return FloatSwap(l);
+}
+#else
+#error One of QUAKE2_HOST_LITTLE_ENDIAN or QUAKE2_HOST_BIG_ENDIAN must be defined
+#endif
 
 void	Swap_Init (void);
 char	*va(char *format, ...);
@@ -273,7 +402,7 @@ void	Sys_FindClose (void);
 
 
 // this is only here so the functions in q_shared.c and q_shwin.c can link
-void Sys_Error (char *error, ...);
+NORETURN void Sys_Error (char *error, ...);
 void Com_Printf (char *msg, ...);
 
 

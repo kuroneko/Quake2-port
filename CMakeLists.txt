@@ -6,10 +6,11 @@ if(CMAKE_SYSTEM_NAME MATCHES Windows)
     # can't trust CMAKE_SYSTEM_PROCESSOR in this case
     if(CMAKE_SIZEOF_VOID_P EQUAL 8)
         set(QUAKE2_PLATFORM_SUFFIX "x64")
-        set(QUAKE2_BUILD_DEFS C_ONLY)
+        set(QUAKE2_BUILD_DEFS C_ONLY NOMINMAX)
         set(QUAKE2_CACHELINE_SIZE 64)
     else()
         set(QUAKE2_PLATFORM_SUFFIX "x86")
+        set(QUAKE2_BUILD_DEFS NOMINMAX)
         # this is probably incorrect today, but matches the legacy behaviour
         set(QUAKE2_CACHELINE_SIZE 32)
     endif()
@@ -150,7 +151,12 @@ elseif(CMAKE_SYSTEM_NAME MATCHES "Windows")
 endif()
 
 add_subdirectory(game)
+add_subdirectory(rogue)
+add_subdirectory(xatrix)
 add_subdirectory(ctf)
 
 add_subdirectory(ref_gl)
 add_subdirectory(ref_soft)
+
+#install misc files.
+install(FILES COPYING DESTINATION .)
