@@ -31,7 +31,7 @@ void Sys_mkdir (char *path)
 {
 }
 
-void Sys_Error (char *error, ...)
+NORETURN void Sys_Error (char *error, ...)
 {
 	va_list		argptr;
 

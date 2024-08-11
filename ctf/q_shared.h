@@ -61,6 +61,15 @@ typedef enum {false, true}	qboolean;
 #define NULL ((void *)0)
 #endif
 
+#ifndef NORETURN
+#if defined(__GNUC__)
+#define NORETURN    __attribute__((noreturn))
+#elif defined(_MSC_VER)
+#define NORETURN    __declspec(noreturn)
+#else
+#define NORETURN
+#endif
+#endif
 
 // angle indexes
 #define	PITCH				0		// up / down

@@ -64,6 +64,7 @@ SYSTEM IO
 */
 
 
+NORETURN
 void Sys_Error (char *error, ...)
 {
 	va_list		argptr;

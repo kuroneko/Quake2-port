@@ -806,7 +806,7 @@ void	*Sys_GetGameAPI (void *parms);
 char	*Sys_ConsoleInput (void);
 void	Sys_ConsoleOutput (char *string);
 void	Sys_SendKeyEvents (void);
-void	Sys_Error (char *error, ...);
+NORETURN void	Sys_Error (char *error, ...);
 void	Sys_Quit (void);
 char	*Sys_GetClipboardData( void );
 void	Sys_CopyProtect (void);

@@ -1391,7 +1391,7 @@ refexport_t GetRefAPI (refimport_t rimp)
 
 #ifndef REF_HARD_LINKED
 // this is only here so the functions in q_shared.c and q_shwin.c can link
-void Sys_Error (char *error, ...)
+NORETURN void Sys_Error (char *error, ...)
 {
 	va_list		argptr;
 	char		text[1024];
